@@ -7,6 +7,7 @@ def get_random_word():
     return random.choice(WORDS)
 
 def display_game_state(mistakes, secret_word, guessed_letters):
+    print("\n" + "=" * 30)
     print(STAGES[mistakes])
 
     display_word = ""
@@ -16,21 +17,34 @@ def display_game_state(mistakes, secret_word, guessed_letters):
         else:
             display_word += "_ "
 
-    print("Word:", display_word)
-
-    if guessed_letters:
-        print("Guessed letters:", " ".join(sorted(guessed_letters)))
-    else:
-        print("Guessed letters: -")
-
-    print("Mistakes:", mistakes)
-    print()
+    print(f"Word: {display_word}")
+    print(f"Guessed letters: {' '.join(sorted(guessed_letters)) if guessed_letters else '-'}")
+    print(f"Mistakes: {mistakes}/{len(STAGES) - 1}")
+    print("=" * 30 + "\n")
 
 def is_word_guessed(secret_word, guessed_letters):
     for letter in secret_word:
         if letter not in guessed_letters:
             return False
     return True
+
+def get_valid_guess(guessed_letters):
+    while True:
+        guess = input("Guess a letter: ").lower().strip()
+
+        if len(guess) != 1:
+            print("Please enter exactly one character.\n")
+            continue
+
+        if not guess.isalpha():
+            print("Please enter a letter from a to z.\n")
+            continue
+
+        if guess in guessed_letters:
+            print("You already guessed that letter.\n")
+            continue
+
+        return guess
 
 def play_game():
     secret_word = get_random_word()
@@ -42,16 +56,7 @@ def play_game():
 
     while mistakes < max_mistakes and not is_word_guessed(secret_word, guessed_letters):
         display_game_state(mistakes, secret_word, guessed_letters)
-
-        guess = input("Guess a letter: ").lower()
-
-        if len(guess) != 1 or not guess.isalpha():
-            print("Please enter exactly one letter.\n")
-            continue
-
-        if guess in guessed_letters:
-            print("You already guessed that letter.\n")
-            continue
+        guess = get_valid_guess(guessed_letters)
 
         guessed_letters.append(guess)
 
@@ -64,7 +69,16 @@ def play_game():
     display_game_state(mistakes, secret_word, guessed_letters)
 
     if is_word_guessed(secret_word, guessed_letters):
-        print("You saved the snowman!")
+        print("You saved the snowman!\n")
     else:
         print("The snowman melted!")
-        print("The word was:", secret_word)
+        print(f"The word was: {secret_word}\n")
+
+def ask_replay():
+    while True:
+        answer = input("Play again? (y/n): ").lower().strip()
+        if answer in ("y", "yes"):
+            return True
+        if answer in ("n", "no"):
+            return False
+        print("Please answer with 'y' or 'n'.\n")
