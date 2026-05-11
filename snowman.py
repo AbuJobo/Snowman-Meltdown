@@ -1,16 +1,23 @@
-# This is a sample Python script.
+import random
 
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
+# List of secret words
+WORDS = ["python", "git", "github", "snowman", "meltdown"]
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+def get_random_word():
+    """Selects a random word from the list."""
+    return WORDS[random.randint(0, len(WORDS) - 1)]
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+
+def play_game():
+    secret_word = get_random_word()
+    print("Welcome to Snowman Meltdown!")
+    print("Secret word selected: " + secret_word)  # for testing, later remove this line
+
+
+    guess = input("Guess a letter: ").lower()
+    print("You guessed:", guess)
+
+
+if __name__ == "__main__":
+    play_game()
